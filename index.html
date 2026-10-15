@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App Demo</title>
+    <link rel="icon" href="data:,">
+    <!-- Nhúng React 17 và ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- Nhúng Babel để viết được cú pháp JSX trực tiếp trong HTML -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; background: 
+#f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .weather-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { padding: 10px; width: 80%; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; }
+        button { padding: 10px 15px; background: 
+#007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background: 
+#0056b3; }
+        .result { margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function WeatherApp() {
+            // Khai báo State bằng React.useState
+            const [city, setCity] = React.useState('');
+            const [weather, setWeather] = React.useState(null);
+
+            // Dữ liệu mẫu (Mock data) để demo nhanh không cần gọi API phức tạp
+            const weatherData = {
+                "hà nội": { temp: "30°C", humidity: "75%", condition: "Nắng nhẹ" },
+                "hồ chí minh": { temp: "34°C", humidity: "80%", condition: "Có mây" },
+                "đà nẵng": { temp: "28°C", humidity: "82%", condition: "Mưa rào" }
+            };
+
+            const handleSearch = () => {
+                const formattedCity = city.trim().toLowerCase();
+                if (weatherData[formattedCity]) {
+                    setWeather(weatherData[formattedCity]);
+                } else {
+                    setWeather({ temp: "--", humidity: "--", condition: "Không tìm thấy thành phố này!" });
+                }
+            };
+
+            return (
+                <div className="weather-card">
+                    <h2>Ứng dụng Thời Tiết</h2>
+                    <input 
+                        type="text" 
+                        placeholder="Nhập thành phố (Hà Nội, Hồ Chí Minh...)" 
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                    />
+                    <br />
+                    <button onClick={handleSearch}>Xem thời tiết</button>
+
+                    {weather && (
+                        <div className="result">
+                            <p><strong>Trạng thái:</strong> {weather.condition}</p>
+                            <p><strong>Nhiệt độ:</strong> {weather.temp}</p>
+                            <p><strong>Độ ẩm:</strong> {weather.humidity}</p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<WeatherApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
